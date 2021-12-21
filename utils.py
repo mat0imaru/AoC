@@ -24,3 +24,17 @@ def listElemStr2Int(li):
     for idx,elem in enumerate(li):
         li[idx] = int(elem)
     return(li)
+
+def listElemInt2Str(li):
+    for idx,elem in enumerate(li):
+        li[idx] = str(elem)
+    return(li)
+
+def sortString(string):
+    return ''.join(sorted(string))
+
+def subString(string1, string2):
+    for c in string2:
+        if c in string1:
+            string1 = string1.replace(c, '')
+    return string1
