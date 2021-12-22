@@ -24,13 +24,13 @@ def pathFinder(odom, adjMat, paths, validation):
             elif validation(next_odom):
                 pathFinder(next_odom, adjMat, paths, validation)
 
-def vaildOdom1(odom):
+def vaildOdom1(odom):   # for pt1
     for i,o in enumerate(odom):
         if (o in small_caves) and (o in odom[:i]):
             return False
     return True
 
-def vaildOdom2(odom):
+def vaildOdom2(odom):   # for pt2
     visited = []
     for i,o in enumerate(odom):
         if (o in small_caves) and (o in odom[:i]):
@@ -42,7 +42,6 @@ def vaildOdom2(odom):
             else:
                 return False
     return True
-
 
 def main():
     global sz
@@ -72,7 +71,7 @@ def main():
         adj_mat[caves.index(line[1])][caves.index(line[0])] = 1
     print(adj_mat)
     paths = []
-    pathFinder(['start'], adj_mat, paths, vaildOdom2)
+    pathFinder(['start'], adj_mat, paths, vaildOdom2) # edit here for change pt1/pt2
     print(len(paths))
 
 if __name__ == '__main__':
