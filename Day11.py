@@ -87,7 +87,6 @@ def main():
     cv2.imshow('octopuses',cv2.resize(disp_dumbo(octopuses),dsize=(0,0), fx=100, fy=100, interpolation=cv2.INTER_LINEAR))
     cv2.waitKey(0)
     print(total_flashes)
-    
 
 if __name__ == '__main__':
     main()
