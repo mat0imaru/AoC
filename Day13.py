@@ -13,6 +13,7 @@ def readFileReturnList(f):
 def main():
     # data loading
     f = open("Day13_input",'r')
+    scale = 1
     dots = readFileReturnList(f)
     insts = readFileReturnList(f)
     f.close()
@@ -37,17 +38,35 @@ def main():
     print(dots)
     print(insts)
     print("width = %d, height = %d"%(width,height))
+    width += 1
+    height += 1
     # initializing
-    paper = np.zeros([width+1,height+1])
+    paper = np.zeros([width,height])
     for dot in dots:
         paper[dot[0]][dot[1]] = 1
-    cv2.imshow("paper", paper)
+    cv2.imshow("paper", cv2.resize(paper,dsize=(0,0),fx=scale,fy=scale,interpolation=cv2.INTER_NEAREST).transpose())
     cv2.waitKey(0)
     for inst in insts:
-        pass
-    cv2.imshow("paper", paper)
-    cv2.waitKey(0)
-    
+        if inst[0] == 'x':
+            for i in range(width):
+                for j in range(height):
+                    if i > inst[1]:
+                        paper[inst[1]-(i-inst[1])][j] += paper[i][j]
+                        paper[i][j] = 0
+        elif inst[0] == 'y':
+            for i in range(width):
+                for j in range(height):
+                    if j > inst[1]:
+                        paper[i][inst[1]-(j-inst[1])] += paper[i][j]
+                        paper[i][j] = 0
+        visible = 0
+        for i in range(width):
+            for j in range(height):
+                if paper[i][j] > 0:
+                    visible += 1
+        print(visible)
+        cv2.imshow("paper", cv2.resize(paper,dsize=(0,0),fx=scale,fy=scale,interpolation=cv2.INTER_NEAREST).transpose())
+        cv2.waitKey(0)
 
 if __name__ == '__main__':
     main()
