@@ -66,7 +66,8 @@ def main():
                     visible += 1
         print(visible)
         cv2.imshow("paper", cv2.resize(paper,dsize=(0,0),fx=scale,fy=scale,interpolation=cv2.INTER_NEAREST).transpose())
-        cv2.waitKey(0)
+        cv2.waitKey(500)
+    cv2.waitKey(0)
 
 if __name__ == '__main__':
     main()
