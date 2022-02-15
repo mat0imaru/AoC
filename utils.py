@@ -20,7 +20,7 @@ def readFileReturnBingo(f,size):
     bingo = listElemStr2Int(bingo)
     return bingo
 
-def readFileReturnMap(f,width,height):
+def readFileReturnMap(f,width,height):    
     map = np.zeros([width,height])
     for i in range(height):
         line = f.readline()
