@@ -29,11 +29,7 @@ def risk_level(m: np.ndarray):
                 result[i][j] = m[i][j] + min(result[i-1][j], result[i][j-1])
     return result
 
-# dijkstra algorithm
-def dijkstra(map):
-    width, height = np.shape(map)
-    mask = np.zeros_like(map)
-    
+   
 
 def main():
     width = 100
