@@ -1,17 +1,7 @@
 import numpy as np
 import cv2
-from utils import readFileReturnMap, sign
+from utils import readFileReturnMap, sign, convolution
 from time import sleep
-
-def convolution(map, filter, fx = 3, fy = 3, padding = 1, stride = 1, const_val = 0):
-    (width, height) = np.shape(map)
-    padded_map = np.pad(map,((padding,padding),(padding,padding)), mode='constant',constant_values = const_val)
-    output = np.zeros([int((width+2*padding-fx)/stride)+1,int((height+2*padding-fy)/stride)+1])
-    for i in range(0,width,stride):
-        for j in range(0,height,stride):
-            filter_input = padded_map[i:i+fx,j:j+fy]
-            output[i][j] = filter(filter_input)
-    return output
 
 def local_minimum(map):
     return  (sign(map[1][0] - map[1][1]) 
