@@ -29,8 +29,6 @@ def risk_level(m: np.ndarray):
                 result[i][j] = m[i][j] + min(result[i-1][j], result[i][j-1])
     return result
 
-   
-
 def main():
     width = 100
     height = 100
