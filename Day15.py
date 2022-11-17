@@ -1,6 +1,7 @@
 import numpy as np
 from utils import readFileReturnMap
 import cv2
+from functools import lru_cache
 
 # reccursive solver -> take too long time
 def lowest_risk_level(m: np.ndarray, x: int, y: int) -> int:
@@ -29,7 +30,17 @@ def risk_level(m: np.ndarray):
                 result[i][j] = m[i][j] + min(result[i-1][j], result[i][j-1])
     return result
 
-   
+# new method! direction not be restict to down and right
+def lowest_risk_level2(m: np.ndarray, x, y):
+    if (x == 0) and (y == 0):
+        return 0
+    elif (x == 0):
+        return m[x][y] + lowest_risk_level(m, x, y-1)
+    elif (y == 0):
+        return m[x][y] + lowest_risk_level(m, x-1, y)
+    else:
+        return m[x][y] + min(lowest_risk_level(m, x-1, y), lowest_risk_level(m, x, y-1))
+
 
 def main():
     width = 100
@@ -37,8 +48,8 @@ def main():
     f = open("Day15_input", 'r')
     chiton_map = readFileReturnMap(f, width, height)
     risk_level_map = risk_level(chiton_map)
-    print(chiton_map)
-    print(risk_level_map)
+    #print(chiton_map)
+    #print(risk_level_map)
     print(risk_level_map[-1][-1])
     cv2.imshow("risk_level",cv2.resize(risk_level_map/np.max(risk_level_map), dsize=(400,400), interpolation=cv2.INTER_NEAREST))
     cv2.waitKey(0)
