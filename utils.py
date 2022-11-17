@@ -25,23 +25,23 @@ def readFileReturnMap(f,width,height):
     for i in range(height):
         line = f.readline()
         for j in range(width):
-            map[j][i] = int(line[j])
+            map[i][j] = int(line[j])
     return map
 
-def listElemStr2Int(li):
+def listElemStr2Int(li: list) -> list:
     for idx,elem in enumerate(li):
         li[idx] = int(elem)
     return(li)
 
-def listElemInt2Str(li):
+def listElemInt2Str(li: list) -> list:
     for idx,elem in enumerate(li):
         li[idx] = str(elem)
     return(li)
 
-def sortString(string):
+def sortString(string: str) -> str:
     return ''.join(sorted(string))
 
-def subString(string1, string2):
+def subString(string1: str, string2: str) -> str:
     for c in string2:
         if c in string1:
             string1 = string1.replace(c, '')
