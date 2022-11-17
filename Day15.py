@@ -41,6 +41,16 @@ def lowest_risk_level2(m: np.ndarray, x, y):
     else:
         return m[x][y] + min(lowest_risk_level(m, x-1, y), lowest_risk_level(m, x, y-1))
 
+## generative solver
+# path should have 
+# # (width+n-1) right move
+# # (height+m-1) down move
+# # (n) left move
+# # (m) up move
+# that we have totally width + height + 2*n + 2*m - 2 moves.
+# So, we need to find permutation of moves.
+def path_generation():
+    pass
 
 def main():
     width = 100
