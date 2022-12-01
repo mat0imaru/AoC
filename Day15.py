@@ -4,6 +4,8 @@ import cv2
 from functools import lru_cache
 import time
 
+np.printoptions(precision=0)
+
 # # reccursive solver -> take too long time
 # def lowest_risk_level(m: np.ndarray, x: int, y: int) -> int:
 #     if (x == 0) and (y == 0):
@@ -95,34 +97,66 @@ import time
 #     return actions
 
 # dijkstra solver
-def dijkstra_lowest_risk_level(m):
-    risk_level = 0
-    risk_level_map = np.ones_like(m)*10000
+def dijkstra_lowest_risk_level(m, w, h):
+    w, h = np.shape(m)
+    visited = []
+    visited_map = np.zeros_like(m)
+    risk_level_map = np.ones_like(m)*1000000
     risk_level_map[0,0] = 0
     current_pos = 0
-    reachable = available_node(current_pos)
-    print(reachable)
-    # print(risk_level_map)
-    return risk_level
+    while not current_pos == 9999:
+        reachable = available_node(current_pos, w, h)
+        # print(reachable)
+        for r in reachable:
+            if r in visited:
+                continue
+            distance = risk_level_map[current_pos//w, current_pos%h] + m[r//w, r%h]
+            print(f"now_pos = {current_pos}, next_pos = {r}, distance = {distance}")
+            # print(f"risk level of next_pos = {risk_level_map[r//100, r%100]}")
+            if distance < risk_level_map[r//w, r%h]:
+                risk_level_map[r//w, r%h] = distance
+        visited.append(current_pos)
+        visited_map[current_pos//w, current_pos%h] = 1000000
+        # print(visited_map+risk_level_map)
+        current_pos = np.argmin(visited_map+risk_level_map)
+        if current_pos == w*h-1:
+            break
+        # time.sleep(0.05)
+        cv2.imshow("risk_level",cv2.resize(risk_level_map/np.max(risk_level_map), dsize=(600,600), interpolation=cv2.INTER_NEAREST))
+        # cv2.imshow("visited",cv2.resize(visited_map/np.max(visited_map), dsize=(600,600), interpolation=cv2.INTER_NEAREST))
+        cv2.waitKey(1)
+    return risk_level_map
 
-def available_node(pos):
+def available_node(pos, w, h):
     nodes = []
-    if (pos+1)%100 == (pos%100):
+    if (pos+1)//w == (pos//w):
         nodes.append(pos+1)
-    if pos%100 < 99:
-        nodes.append(pos+100)
-    if pos-100 >= 100:
-        nodes.append(pos-100)
-    if pos-1 >= 0:
+    if pos//w < 99:
+        nodes.append(pos+w)
+    if pos-w >= 0:
+        nodes.append(pos-w)
+    if (pos%w)-1 >= 0:
         nodes.append(pos-1)
     return nodes
+
+def map_extender(m):
+    w, h = np.shape(m)
+    extended = np.zeros((5*w, 5*h))
+    for i in range(w):
+        for j in range(h):
+            risk_level = m[i,j]
+            for k in range(5):
+                for l in range(5):
+                    extended[i*k, j*l] = (risk_level+k+l)%10
+    return extended
 
 def main():
     width = 100
     height = 100
     f = open("Day15_input", 'r')
     chiton_map = readFileReturnMap(f, width, height)
-    dijkstra_lowest_risk_level(chiton_map)
+    ext_chiton_map = map_extender(chiton_map)
+    risk_level_map = dijkstra_lowest_risk_level(ext_chiton_map, width*5, height*5)
 
     # risk_level, odom = greedy_lowest_risk_level(chiton_map)
     # print(risk_level)
@@ -137,11 +171,10 @@ def main():
 
     # risk_level_map = risk_level(chiton_map)
     #print(chiton_map)
-    #print(risk_level_map)
-    # print(risk_level_map[-1][-1])
-    # cv2.imshow("risk_level",cv2.resize(risk_level_map/np.max(risk_level_map), dsize=(400,400), interpolation=cv2.INTER_NEAREST))
-    # cv2.waitKey(0)
-
+    # print(risk_level_map)
+    print(f"risk level = {risk_level_map[-1][-1]}")
+    # cv2.imshow("risk_level",cv2.resize(risk_level_map/np.max(risk_level_map), dsize=(600,600), interpolation=cv2.INTER_NEAREST))
+    cv2.waitKey(0)
 
 if __name__ == "__main__":
     main()
