@@ -101,40 +101,44 @@ def dijkstra_lowest_risk_level(m, w, h):
     w, h = np.shape(m)
     visited = []
     visited_map = np.zeros_like(m)
-    risk_level_map = np.ones_like(m)*1000000
+    risk_level_map = np.ones_like(m)*1000000000000
     risk_level_map[0,0] = 0
     current_pos = 0
-    while not current_pos == 9999:
+    while not current_pos == w*h-1:
         reachable = available_node(current_pos, w, h)
-        # print(reachable)
+        print(reachable)
+        current_risk_level = risk_level_map[current_pos//w, current_pos%h]
         for r in reachable:
             if r in visited:
                 continue
-            distance = risk_level_map[current_pos//w, current_pos%h] + m[r//w, r%h]
+            distance = current_risk_level + m[r//w, r%h]
             print(f"now_pos = {current_pos}, next_pos = {r}, distance = {distance}")
             # print(f"risk level of next_pos = {risk_level_map[r//100, r%100]}")
             if distance < risk_level_map[r//w, r%h]:
                 risk_level_map[r//w, r%h] = distance
         visited.append(current_pos)
-        visited_map[current_pos//w, current_pos%h] = 1000000
+        visited_map[current_pos//w, current_pos%h] = 1000000000000
         # print(visited_map+risk_level_map)
         current_pos = np.argmin(visited_map+risk_level_map)
         if current_pos == w*h-1:
+            print(f"exit reached! current position = {current_pos}")
             break
         # time.sleep(0.05)
-        cv2.imshow("risk_level",cv2.resize(risk_level_map/np.max(risk_level_map), dsize=(600,600), interpolation=cv2.INTER_NEAREST))
+        # cv2.imshow("risk_level",cv2.resize(risk_level_map/np.max(risk_level_map), dsize=(600,600), interpolation=cv2.INTER_NEAREST))
         # cv2.imshow("visited",cv2.resize(visited_map/np.max(visited_map), dsize=(600,600), interpolation=cv2.INTER_NEAREST))
-        cv2.waitKey(1)
+        # k = cv2.waitKey(1)
+        # if ord('q') == k:
+            # exit()
     return risk_level_map
 
 def available_node(pos, w, h):
     nodes = []
     if (pos+1)//w == (pos//w):
         nodes.append(pos+1)
-    if pos//w < 99:
+    if (pos+h)//h < h:
         nodes.append(pos+w)
-    if pos-w >= 0:
-        nodes.append(pos-w)
+    if (pos-h) >= 0:
+        nodes.append(pos-h)
     if (pos%w)-1 >= 0:
         nodes.append(pos-1)
     return nodes
@@ -147,7 +151,7 @@ def map_extender(m):
             risk_level = m[i,j]
             for k in range(5):
                 for l in range(5):
-                    extended[i*k, j*l] = (risk_level+k+l)%10
+                    extended[i+k*w, j+l*h] = (risk_level+k+l)%10 + (risk_level+k+l)//10
     return extended
 
 def main():
