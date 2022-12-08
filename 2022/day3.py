@@ -12,10 +12,13 @@ priorities = {
 
 def main():
     SoP = 0
+    # f = open("day3_input_sample", 'r')
     f = open("day3_input", 'r')
     # errors = []
+    lines = []
     while True:
         line = f.readline().strip()
+        lines.append(line)
         if not line:
             break
         compartments = [line[:len(line)//2], line[len(line)//2:]]
@@ -32,6 +35,22 @@ def main():
         SoP += priorities[error]
         # errors.append(error)
     # print(errors)
+    print(SoP)
+    SoP = 0
+    for i in range(int(len(lines)/3)):
+        # print(lines[i*3])
+        # print(lines[i*3+1])
+        # print(lines[i*3+2])
+        A = set()
+        for item in lines[i*3]:
+            A.add(item)
+        B = set()
+        for item in lines[i*3+1]:
+            B.add(item)
+        C = set()
+        for item in lines[i*3+2]:
+            C.add(item)
+        SoP += priorities[list(A&B&C)[0]]
     print(SoP)
 
 if __name__ == "__main__":
