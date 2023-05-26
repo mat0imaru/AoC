@@ -3,7 +3,7 @@ These scripts are implemented to solve [A](https://adventofcode.com/2021)[oC](ht
 
 Every scripts were fully implemented by myself in python.
 
-## files description
+## File structure
 - 2021
     - Day*.py
         - Implementation script for solving each problem of day
